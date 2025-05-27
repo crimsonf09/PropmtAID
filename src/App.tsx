@@ -1,9 +1,10 @@
 import {  useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0);
   console.log("App component rendered");
-  const onClick = async () => {
+  const [isOn, setIsOn] = useState(false);
+  const toggleSwitch = async () => {
+    setIsOn(!isOn);
     try {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
@@ -39,41 +40,29 @@ function App() {
       console.error("Error injecting script:", err);
     }
   };
-  // const [userPrompt, setUserPrompt] = useState("");
-
-  // useEffect(() => {
-  //   const box = document.getElementById("chat-input") as HTMLTextAreaElement | null;
-
-  //   if (!box) {
-  //     console.error("Chat input box not found.");
-  //     return;
-  //   }
-
-  //   const handleInput = (e: Event) => {
-  //     const value = (e.target as HTMLTextAreaElement).value;
-  //     setUserPrompt(value);
-  //     console.log("User Prompt:", value);
-  //     console.log("user",userPrompt)
-  //   };
-
-  //   box.addEventListener("input", handleInput);
-
-  //   return () => {
-  //     box.removeEventListener("input", handleInput);
-  //   };
-  // }, []);
   return (
-    <div className="p-4 font-sans">
-      <h1 className="text-xl font-bold mb-4">🚀 React Chrome Extension</h1>
-      <button
-        onClick={() => {
-          setCount((c) => c + 1);
-          onClick();
-        }}
-        className="px-5 py-2 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
-      >
-        count is {count}
-      </button>
+    <div className="p-4 font-sans bg-blue-400">
+      <h1 className="text-2xl font-bold mb-10">🚀 PromptAID Extension</h1>
+      <div className="flex items-center space-x-3">
+            {/* Switch */}
+            <button
+                onClick={toggleSwitch}
+                className={`relative inline-flex items-center h-6 w-11 rounded-full  ${
+                    isOn ? "bg-blue-500" : "bg-gray-300"
+                }`}
+            >
+                <span
+                    className={`absolute left-0 top-0 h-5 w-5 rounded-full bg-white transition-transform ${
+                        isOn ? "translate-x-5" : "translate-x-0"
+                    }`}
+                ></span>
+            </button>
+
+            {/* Label */}
+            <span className="text-gray-900 font-medium">
+                {isOn ? "ON" : "OFF"}
+            </span>
+        </div>
     </div>
   );
 }

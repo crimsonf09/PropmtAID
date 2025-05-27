@@ -1,27 +1,46 @@
+
+// import * as ReactDOM from "react-dom/client";
+// import PromptBox from "./components/promptBox";
 import type { ChangeClassProps } from "./utils/ChangeClass";
 import ChangeClass from "./utils/ChangeClass";
 // import { Injector } from "./utils/Injector";
-// import PromptBox from "./components/promptBox";
 
 // 1. Change target class using classList.contains (not selector string)
 const initialize = () => {
   const cover: ChangeClassProps = {
     name: "chatbox",
-    className: ".stretch.flex.flex-row.gap-3.lg\\:mx-auto.lg\\:max-w-3xl.mt-\\[40px\\]",
-    changedClassName: ".stretch.flex.flex-col.gap-3.lg\\:mx-auto.lg\\:max-w-3xl.mt-\\[40px\\]",
+    // working selector manually modify (may be implement function in the future. TOo much condition for now)
+    selector: '#__next > div > div.w-screen.h-screen.flex.overflow-hidden.light > main > div > div.flex.flex-col.justify-end.w-full.lg\\:px-6.md\\:px-4.px-4.bg-gradient-to-b.from-transparent.via-white.to-white.dark\\:border-white\\/20.dark\\:via-\\[\\#343541\\].dark\\:to-\\[\\#343541\\].absolute.bottom-0 > div > div.stretch.flex.flex-row.gap-3.lg\\:mx-auto.lg\\:max-w-3xl.mt-\\[40px\\]',
+    //original copy from chrome selector
+    // selector: "#__next > div > div.w-screen.h-screen.flex.overflow-hidden.light > main > div > div.flex.flex-col.justify-end.w-full.lg\:px-6.md\:px-4.px-4.bg-gradient-to-b.from-transparent.via-white.to-white.dark\:border-white\/20.dark\:via-\[\#343541\].dark\:to-\[\#343541\].absolute.bottom-0 > div > div.stretch.flex.flex-row.gap-3.lg\:mx-auto.lg\:max-w-3xl.mt-\[40px\]",
+    changedClassName: "stretch flex flex-col gap-3 lg:mx-auto lg:max-w-3xl mt-[40px]"
   };
-  console.log("Initializing content script...");
-
   ChangeClass(cover);
+    const scroll: ChangeClassProps = {
+    name: "scroll",
+    selector: '#__next > div > div.w-screen.h-screen.flex.overflow-hidden.light > main > div > div.w-full.h-full.overflow-x-hidden',
+    // selector: '#__next > div > div.w-screen.h-screen.flex.overflow-hidden.light > main > div > div.w-full.h-full.overflow-x-hidden',
+    changedClassName: "w-full h-full overflow-x-hidden pb-30"
+  };
+    const targetElement = document.querySelector(scroll.selector)
+    if(targetElement){
+      (targetElement as HTMLElement).style.paddingBottom = "200px"; 
+    }
+    else{
+      console.warn(`Target element "${scroll.name}" not found.`);
+    }
+    
+  
+  // ChangeClass(scroll);
 
   // 2. Inject PromptBox using safe detection (selector logic is moved inside Injector)
-//   Injector({
-//     id: "prompt-box",
-//     selector: "#__next > div > div.w-screen.h-screen.flex.overflow-hidden.light > main > div.relative.flex.flex-col.w-full.h-screen.justify-between.bg-white.dark\:bg-\[\#343541\].overflow-y-auto.overflow-x-hidden > div.flex.flex-col.justify-end.w-full.lg\:px-6.md\:px-4.px-4.bg-gradient-to-b.from-transparent.via-white.to-white.dark\:border-white\/20.dark\:via-\[\#343541\].dark\:to-\[\#343541\].absolute.bottom-0 > div > div",
-//     component: <PromptBox />,
-//     position: "append",
-//     index: 1,
-//   });
+    // Injector({
+    //   id: "prompt-box",
+    //   selector: "#__next > div > div.w-screen.h-screen.flex.overflow-hidden.light > main > div > div.flex.flex-col.justify-end.w-full.lg\\:px-6.md\\:px-4.px-4.bg-gradient-to-b.from-transparent.via-white.to-white.dark\\:border-white\\/20.dark\\:via-\\[\\#343541\\].dark\\:to-\\[\\#343541\\].absolute.bottom-0 > div > div",
+    //   component: <PromptBox />,
+    //   position: "append",
+    //   index: 1,
+    // });
 };
 
 // 3. Attach listener when the chat input is ready
